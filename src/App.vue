@@ -9,8 +9,8 @@ import VueElectronJSONStorage from 'vue-electron-json-storage';
 export default {
   VueElectronJSONStorage,
   name: 'App',
-  beforeMount() {
-
-  }
 }
 </script>
+
+<style lang="scss" scoped>
+</style>

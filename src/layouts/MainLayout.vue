@@ -75,9 +75,6 @@ export default {
       }
     }
   },
-  /* TODO: DEBUG METHOD */
-  updated: console.clear,
-  /* TODO: DELETE HIM! */
   watch: {
     activeTab() {
       if (this.activeTab !== 'general') {
