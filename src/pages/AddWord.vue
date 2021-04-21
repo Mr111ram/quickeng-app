@@ -1,20 +1,28 @@
 <template>
   <q-page class="flex flex-center" style="flex-direction: column">
     <form class="form">
-      <h4 class="text-center text-uppercase" style="margin: 0 0 25px;">Add new English word</h4>
+      <h4 class="text-center text-uppercase" style="margin: 0 0 25px;">
+        Add new English word
+      </h4>
       <q-input
+        filled
+        color="primary"
         type="text"
         class="form__input"
         v-model="word"
         label="Enter English word"
       />
       <q-input
+        filled
+        color="primary"
         type="text"
         class="form__input"
         v-model="translate"
         label="Enter the meaning of English word"
       />
       <q-select
+        filled
+        color="primary"
         label="Enter multiple contextual sentences"
         use-input
         use-chips
@@ -48,7 +56,6 @@
         borderless
         class="full-width"
         color="primary"
-        style="margin-top: 25px"
         @click="addWord"
         label="Add word"
         :disable="!btnDisable"
@@ -66,9 +73,9 @@ export default {
   data(){
     return {
       processing: false,
-      word: 'agree',
-      translate: 'to have the same opinion as somebody; to say that you have the same opinion',
-      sentences: ["I totally agree with you!", "You can't expect them to agree on everything.", "He agreed with them about the need for change."],
+      word: '',
+      translate: '',
+      sentences: [],
       image: null,
     }
   },
@@ -111,7 +118,7 @@ export default {
       this.sentences = [];
 
       const saveImage = ({ name, path }, file=false) => {
-        const folder = join(this.$storage.$appdir, 'images');
+        const folder = join(this.$storage.$appdir, '.images');
         const spl = name.split('.');
         const ext = spl[spl.length - 1];
         const filename = file || Date.now().toString();
@@ -136,23 +143,23 @@ export default {
       if (image) {
         aword.image = await saveImage(image);
       }
-      // TODO: FIX WRITE IN STORAGE!!!
       const dbWrite = async () => {
-        this.$storage.has('awords', async (error, hasKey) => {
+        this.$storage.has('awords', (error, hasKey) => {
           if (hasKey) {
-            await this.$storage.get('awords',(error, data) => {
-              if (error) throw error.message;
-              const payload = data;
-              payload.words.push(aword);
-              this.$storage.set('awords', payload, (error) => {
-                if (error) throw error.message;
-              });
+            this.$storage.get('awords', (error, data) => {
+              if (data) {
+                if (!data.dict) data.dict = [];
+                data.dict.push(aword);
+                this.$storage.set('awords', data, (error) => {
+                  if (error) console.error(error);
+                });
+              }
             });
           } else {
-            await this.$storage.set('awords', { words: [] }, (error) => {
-              if (error) throw error.message;
+            this.$storage.set('awords', { dict: [] }, (error) => {
+              if (error) console.error(error);
+              else dbWrite ();
             });
-            return dbWrite();
           }
         });
       }
@@ -172,7 +179,7 @@ export default {
     min-width: 400px;
     width: 33.33%;
     &__input {
-      margin-top: 5px;
+      margin: 10px 0;
     }
   }
   .processing {

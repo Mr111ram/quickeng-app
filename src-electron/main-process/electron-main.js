@@ -1,4 +1,4 @@
-import { app, BrowserWindow, nativeTheme } from 'electron'
+import { app, BrowserWindow, nativeTheme, protocol } from 'electron'
 import path from 'path';
 
 try {
@@ -34,7 +34,8 @@ function createWindow () {
       nodeIntegrationInWorker: process.env.QUASAR_NODE_INTEGRATION,
       // More info: /quasar-cli/developing-electron-apps/electron-preload-script
       preload: path.resolve(__dirname, 'electron-preload.js'),
-    }
+      webSecurity: false,
+    },
   })
 
   mainWindow.loadURL(process.env.APP_URL)
@@ -45,6 +46,20 @@ function createWindow () {
 }
 
 app.on('ready', createWindow)
+
+app.whenReady().then(() => {
+  protocol.registerFileProtocol('file', (request, callback) => {
+    const pathname = request.url.replace('file:///', '');
+    callback(pathname);
+  });
+});
+
+app.whenReady().then(() => {
+  protocol.registerFileProtocol('file', (request, callback) => {
+    const pathname = decodeURI(request.url.replace('file:///', ''));
+    callback(pathname);
+  });
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
