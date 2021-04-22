@@ -60,6 +60,9 @@
         label="Add word"
         :disable="!btnDisable"
       />
+      <q-btn @click="updateDict">
+        UPDATE DICT
+      </q-btn>
     </form>
   </q-page>
 </template>
@@ -111,6 +114,7 @@ export default {
     }
   },
   methods: {
+    updateDict(){this.$store.dispatch('dictionary/loadDict', this.$storage);},
     async addWord(){
       this.processing = true;
       const { word, translate, image, sentences } = this;

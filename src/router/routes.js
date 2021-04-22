@@ -24,6 +24,12 @@ const routes = [
     children: [
       { path: '', component: () => import('src/pages/MemoryCard.vue') }
     ]
+  },{
+    path: '/word/:id',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('src/pages/WordFullscreen.vue') }
+    ]
   },
 
   // Always leave this as last one,

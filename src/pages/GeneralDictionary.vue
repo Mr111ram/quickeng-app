@@ -1,7 +1,14 @@
 <template>
   <q-page class="flex bg-grey-1">
-    <word-dictionary :dict="words"></word-dictionary>
-    <div class="q-pa-md q-gutter-sm" :style="{ display: banner ? 'none' : 'block' }">
+    <word-dictionary :dict="dict"></word-dictionary>
+    <div
+      class="q-pa-md q-gutter-sm"
+      :style="{
+        'display': (!!this.dict && this.dict.length > 0)
+          ? 'none'
+          : 'block'
+      }"
+    >
       <q-banner class="bg-secondary text-white">
         Your dictionary is still empty.
         Click on the button, or go to the corresponding tab to add the
@@ -15,27 +22,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import WordDictionary from "../components/General/Dictionary.vue";
 
 export default {
   name: 'GeneralDictionary',
-  data(){
-    return {
-      words: [],
-      banner: true,
-    }
+  computed: {
+    ...mapState('dictionary', ['dict'])
   },
-  mounted() {
-    this.$storage.has('awords', (error, hasKey) => {
-      if (hasKey) {
-        this.$storage.get('awords', (error, { dict }) => {
-          this.words = dict;
-          this.banner = true;
-        });
-      } else {
-        this.banner = false;
-      }
-    });
+  mounted (){
+    this.$store.dispatch('dictionary/loadDict', this.$storage);
   },
   components: {
     WordDictionary
