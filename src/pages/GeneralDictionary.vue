@@ -30,11 +30,8 @@ export default {
   computed: {
     ...mapState('dictionary', ['dict'])
   },
-  mounted (){
-    this.$store.dispatch('dictionary/loadDict', this.$storage);
-  },
   components: {
     WordDictionary
-  }
+  },
 }
 </script>

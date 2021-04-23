@@ -1,43 +1,46 @@
 <template>
   <q-scroll-area class="fit">
-    <q-list padding class="menu-list">
-      <q-item clickable v-ripple>
-        <q-item-section avatar>
-          <q-icon name="inbox" />
+    <q-list padding>
+      <q-item-label header> Manipulate </q-item-label>
+      <q-item tag="label" v-ripple>
+        <q-item-section side>
+          <q-icon name="delete_outline" color="red-4" style="font-size: 2em;" />
         </q-item-section>
-
         <q-item-section>
-          Inbox
+          <q-item-label class="text-red-4" style="font-size: 1.2em;">Deleted mode</q-item-label>
         </q-item-section>
       </q-item>
-
-      <q-item active clickable v-ripple>
-        <q-item-section avatar>
-          <q-icon name="star" />
+      <q-item tag="label" v-ripple>
+        <q-item-section side>
+          <q-icon name="delete_outline" color="dark" style="font-size: 2em;" />
         </q-item-section>
-
         <q-item-section>
-          Star
+          <q-item-label class="text-dark" style="font-size: 1.2em;">Deleted mode</q-item-label>
         </q-item-section>
       </q-item>
-
-      <q-item clickable v-ripple>
-        <q-item-section avatar>
-          <q-icon name="send" />
+      <q-item-label header> Filters </q-item-label>
+      <q-item tag="label" v-ripple>
+        <q-item-section side>
+          <q-icon name="delete_outline" color="dark" style="font-size: 2em;" />
         </q-item-section>
-
         <q-item-section>
-          Send
+          <q-item-label class="text-dark" style="font-size: 1.2em;">Deleted mode</q-item-label>
         </q-item-section>
       </q-item>
-
-      <q-item clickable v-ripple>
-        <q-item-section avatar>
-          <q-icon name="drafts" />
+      <q-item tag="label" v-ripple>
+        <q-item-section side>
+          <q-icon name="delete_outline" color="dark" style="font-size: 2em;" />
         </q-item-section>
-
         <q-item-section>
-          Drafts
+          <q-item-label class="text-dark" style="font-size: 1.2em;">Deleted mode</q-item-label>
+        </q-item-section>
+      </q-item>
+      <q-item tag="label" v-ripple>
+        <q-item-section side>
+          <q-icon name="delete_outline" color="dark" style="font-size: 2em;" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label class="text-dark" style="font-size: 1.2em;">Deleted mode</q-item-label>
         </q-item-section>
       </q-item>
     </q-list>

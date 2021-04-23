@@ -60,9 +60,6 @@
         label="Add word"
         :disable="!btnDisable"
       />
-      <q-btn @click="updateDict">
-        UPDATE DICT
-      </q-btn>
     </form>
   </q-page>
 </template>
@@ -70,6 +67,7 @@
 <script>
 import { join } from 'path';
 import fs from 'fs';
+import { mapActions } from 'vuex';
 
 export default {
   name: "AddWord",
@@ -114,60 +112,23 @@ export default {
     }
   },
   methods: {
-    updateDict(){this.$store.dispatch('dictionary/loadDict', this.$storage);},
+    ...mapActions('dictionary', ['addNewWord', 'imageSave', 'dataSync']),
     async addWord(){
       this.processing = true;
       const { word, translate, image, sentences } = this;
+      const aword = { word, translate, sentences };
+
       this.word = this.translate = this.image = null;
       this.sentences = [];
 
-      const saveImage = ({ name, path }, file=false) => {
-        const folder = join(this.$storage.$appdir, '.images');
-        const spl = name.split('.');
-        const ext = spl[spl.length - 1];
-        const filename = file || Date.now().toString();
-        const endPath = join(folder, `${ filename }.${ext}`);
-
-        /* Folder test, if not folder, make folder */
-        fs.stat(folder, (err) => {
-          if (!err) /* Okay copy file */ {
-            fs.createReadStream(path)
-              .pipe(fs.createWriteStream(endPath));
-          } else if (err.code === 'ENOENT') /* Not folder, make and start function saveImage */ {
-            fs.mkdirSync(folder);
-            return saveImage({ name, path }, filename);
-          }
-        });
-
-        return endPath;
-      }
-
-      const aword = { word, translate, sentences };
-
       if (image) {
-        aword.image = await saveImage(image);
+        this.imageSave(image);
+        aword.image = this.$store.getters['dictionary/getImgPath'];
       }
-      const dbWrite = async () => {
-        this.$storage.has('awords', (error, hasKey) => {
-          if (hasKey) {
-            this.$storage.get('awords', (error, data) => {
-              if (data) {
-                if (!data.dict) data.dict = [];
-                data.dict.push(aword);
-                this.$storage.set('awords', data, (error) => {
-                  if (error) console.error(error);
-                });
-              }
-            });
-          } else {
-            this.$storage.set('awords', { dict: [] }, (error) => {
-              if (error) console.error(error);
-              else dbWrite ();
-            });
-          }
-        });
-      }
-      await dbWrite ();
+
+      this.addNewWord(aword);
+      this.dataSync(this.$storage);
+
       this.processing = false;
     },
     uploadImage(image){
