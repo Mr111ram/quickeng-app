@@ -18,12 +18,16 @@
         </template>
       </q-banner>
     </div>
+    <div class="relative-position">
+      <add-word />
+    </div>
   </q-page>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import WordDictionary from "../components/General/Dictionary.vue";
+import AddWord from "components/General/AddWord";
 
 export default {
   name: 'GeneralDictionary',
@@ -31,7 +35,8 @@ export default {
     ...mapState('dictionary', ['dict'])
   },
   components: {
-    WordDictionary
+    WordDictionary,
+    AddWord
   },
 }
 </script>

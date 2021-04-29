@@ -1,7 +1,7 @@
 <template>
   <q-header elevated>
     <q-bar class="q-electron-drag">
-      <q-btn dense flat round icon="menu" @click="$emit('switch-drawer')" />
+      <q-btn dense flat round icon="menu" @click="$emit('switch-drawer')" class="q-electron-drag--exception"/>
 
       <div>{{ title }}</div>
 
